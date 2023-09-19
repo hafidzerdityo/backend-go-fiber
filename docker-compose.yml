@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  myapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rest_template2_i:latest
+    container_name: rest_template2_c
+    ports:
+      - "8100:8100"
+    volumes:
+      - ./app:/code
