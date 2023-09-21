@@ -1,10 +1,15 @@
 package services
 
-import "github.com/sirupsen/logrus"
+import (
+	"github.com/sirupsen/logrus"
+	"hafidzresttemplate.com/datastore"
+)
 
 
 type ServiceSetup struct{
-	Loger *logrus.Logger
+	Logger *logrus.Logger
+	Datastore *datastore.DatastoreSetup
 }
+
 
 

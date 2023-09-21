@@ -13,6 +13,6 @@ func main() {
 	host := os.Getenv("SERVICE_HOST")
 	port := os.Getenv("SERVICE_PORT")
 	
-	app := api.SetupRoutes()
+	app := api.InitApi()
 	app.Run(fmt.Sprintf("%v:%v",host, port))
 }

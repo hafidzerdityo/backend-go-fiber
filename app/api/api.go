@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"hafidzresttemplate.com/datastore"
 	"hafidzresttemplate.com/services"
 )
 
@@ -11,21 +12,27 @@ type ApiSetup struct {
 	Services *services.ServiceSetup
 }
 
-func NewApiSetup()(loggerSet ApiSetup) {
+func NewApiSetup()(apiSet ApiSetup) {
     loggerInit := logrus.New()
-	loggerSet = ApiSetup{
-		Logger: loggerInit}
+	apiSet = ApiSetup{
+		Logger: loggerInit,
+		Services: &services.ServiceSetup{
+			Logger: loggerInit,
+			Datastore: &datastore.DatastoreSetup{
+				Logger: loggerInit,
+			},
+		},
+	}
     return 
 }
 
-func SetupRoutes()(router *gin.Engine) {
+func InitApi()(router *gin.Engine) {
 	router = gin.New()
  	router.Use(gin.Logger())
  	router.Use(gin.Recovery())
-
 	apiSetup := NewApiSetup()
-	apiSetup.Logger.Info("Setting up routes...")
 
+	apiSetup.Logger.Info("Setting up routes...")
 	api := router.Group("/api/v1")
 	{
 		user := api.Group("/user_management")

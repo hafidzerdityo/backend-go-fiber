@@ -10,13 +10,19 @@ import (
 func (a *ApiSetup) GetBooks(c *gin.Context) {
 	a.Logger.Info("Getting books...")
 
-	c.IndentedJSON(http.StatusOK, a.Services.GetBooks())
+	data, err := a.Services.GetBooks()
+	if err != nil{
+		
+	}
+	c.IndentedJSON(http.StatusOK, data)
 }
 
 func (a *ApiSetup) GetTestMap(c *gin.Context) {
 	a.Logger.Info("Getting test map...")
 
-	jsonData, err := json.Marshal(a.Services.GetMap())
+	data, err := a.Services.GetMap()
+
+	jsonData, err := json.Marshal(data)
 	if err != nil {
 		a.Logger.Error(err)
 		c.Error(err)
