@@ -2,10 +2,20 @@ package services
 
 import "hafidzresttemplate.com/data"
 
-func (s *ServiceSetup)GetBooks() (appResult []data.Book, err error) {
+func (s *ServiceSetup)GetUsers() (appResult []data.User, err error) {
+	s.Logger.Info("Users Service exected")
+	tx := s.Db.Begin()
+	if tx.Error != nil {
+		return appResult, tx.Error
+	}
+	
+	appResult, err = s.Datastore.CheckUser(tx)
+	if err != nil {
+		tx.Rollback()
+		s.Logger.Error("Check User Failed, Rollback.")
+	}
 
-	s.Logger.Info("Book Service exected")
-	appResult, err = s.Datastore.CheckUser()
+	tx.Commit()
 	return
 }
 

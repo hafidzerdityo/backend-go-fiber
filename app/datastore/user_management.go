@@ -1,39 +1,27 @@
 package datastore
 
-import "hafidzresttemplate.com/data"
+import (
+	"gorm.io/gorm"
+	"hafidzresttemplate.com/data"
+)
 
-func(d *DatastoreSetup) CheckUser()(queryResult []data.Book, err error){
-	queryResult = []data.Book{
-			{
-				ID:     "1",
-				Title:  "Knight in Shining Armor",
-				Author: "Hafidz Erdityo",
-			},
-			{
-				ID:     "2",
-				Title:  "The Great Gatsby",
-				Author: "F. Scott Fitzgerald",
-			},
-			{
-				ID:     "3",
-				Title:  "To Kill a Mockingbird",
-				Author: "Harper Lee",
-			},
-			{
-				ID:     "4",
-				Title:  "1984",
-				Author: "George Orwell",
-			},
-			{
-				ID:     "5",
-				Title:  "Pride and Prejudice",
-			},
-			{
-				ID:     "6",
-				Title:  "The Catcher in the Rye",
-				Author: "J.D. Salinger",
-			},
-		}
+func(d *DatastoreSetup) CheckUser(tx *gorm.DB)(queryResult []data.User, err error){
+	
+
+	sqlQuery := "SELECT * FROM users"
+
+    // Execute the raw SQL query
+    rawQuery := tx.Raw(sqlQuery)
+    
+    // Handle any query execution error
+    if rawQuery.Error != nil {
+        return nil, rawQuery.Error
+    }
+	
+    // Scan the result into the queryResult slice
+    if err := rawQuery.Scan(&queryResult).Error; err != nil {
+        return nil, err
+    }
 
 	return
 }

@@ -1,6 +1,8 @@
 package datastore
 
-import "github.com/sirupsen/logrus"
+import (
+	"github.com/sirupsen/logrus"
+)
 
 
 type DatastoreSetup struct{

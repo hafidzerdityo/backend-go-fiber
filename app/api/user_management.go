@@ -7,14 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *ApiSetup) GetBooks(c *gin.Context) {
-	a.Logger.Info("Getting books...")
+func (a *ApiSetup) GetUsers(c *gin.Context) {
+	a.Logger.Info("Getting userss...")
 
-	data, err := a.Services.GetBooks()
+	data, err := a.Services.GetUsers()
 	if err != nil{
-		
+		a.Logger.Error("Error when a.Services.GetUsers()")
+		c.IndentedJSON(http.StatusNotFound, "")
+		return
 	}
 	c.IndentedJSON(http.StatusOK, data)
+	return
 }
 
 func (a *ApiSetup) GetTestMap(c *gin.Context) {

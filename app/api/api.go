@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 	"hafidzresttemplate.com/datastore"
 	"hafidzresttemplate.com/services"
 )
@@ -12,12 +13,13 @@ type ApiSetup struct {
 	Services *services.ServiceSetup
 }
 
-func NewApiSetup()(apiSet ApiSetup) {
+func NewApiSetup(db *gorm.DB)(apiSet ApiSetup) {
     loggerInit := logrus.New()
 	apiSet = ApiSetup{
 		Logger: loggerInit,
 		Services: &services.ServiceSetup{
 			Logger: loggerInit,
+			Db: db,
 			Datastore: &datastore.DatastoreSetup{
 				Logger: loggerInit,
 			},
@@ -26,17 +28,17 @@ func NewApiSetup()(apiSet ApiSetup) {
     return 
 }
 
-func InitApi()(router *gin.Engine) {
+func InitApi(db *gorm.DB)(router *gin.Engine) {
 	router = gin.New()
  	router.Use(gin.Logger())
  	router.Use(gin.Recovery())
-	apiSetup := NewApiSetup()
+	apiSetup := NewApiSetup(db)
 
 	apiSetup.Logger.Info("Setting up routes...")
 	api := router.Group("/api/v1")
 	{
 		user := api.Group("/user_management")
-		user.GET("/books", apiSetup.GetBooks)
+		user.GET("/users", apiSetup.GetUsers)
 		user2 := api.Group("/user_management2")
 		user2.GET("/random_map", apiSetup.GetTestMap)
 	}
