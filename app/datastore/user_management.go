@@ -8,7 +8,7 @@ import (
 func(d *DatastoreSetup) CheckUser(tx *gorm.DB)(queryResult []data.User, err error){
 	
 
-	sqlQuery := "SELECT * FROM users"
+	sqlQuery := `SELECT * FROM public."user"`
 
     // Execute the raw SQL query
     rawQuery := tx.Raw(sqlQuery)

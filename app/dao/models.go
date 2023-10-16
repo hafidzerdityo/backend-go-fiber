@@ -7,7 +7,7 @@ import (
 // User represents the user table in the database.
 type User struct {
     Username      string `gorm:"primaryKey;size:20"`
-    HashedPassword string `gorm:"unique;size:255"`
+    HashedPassword string `gorm:"size:255"`
     Nama          string `gorm:"size:255"`
     Role          string `gorm:"size:30"`
     Divisi        string `gorm:"size:255"`
@@ -25,4 +25,12 @@ type Transaksi struct {
     UpdatedAt        *time.Time
     Bsu              float64 `gorm:"type:numeric(10,2)"`
     Username         string `gorm:"foreignKey:Username;size:20"`
+}
+
+func (User) TableName() string {
+    return "user"
+}
+
+func (Transaksi) TableName() string {
+    return "transaksi"
 }

@@ -11,3 +11,20 @@ services:
       - "8100:8100"
     volumes:
       - ./app:/code
+    depends_on:
+      - postgres_rest_template_go
+
+  postgres_rest_template_go:
+    image: postgres:latest
+    container_name: pg_rest_template_go_c
+    restart: always
+    env_file:
+      - ./app/config.env
+    ports:
+      - "8103:8103"
+    volumes:
+      - postgres_data_go:/var/lib/postgresql/data
+    command: postgres -c listen_addresses='*' -c port=8103
+
+volumes:
+  postgres_data_go:
