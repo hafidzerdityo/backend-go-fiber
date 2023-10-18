@@ -39,11 +39,71 @@ func (s *ServiceSetup)GetUsers() (appResponse data.GetUserRes, err error) {
 		return
 	}
 
-	appResponse.RespMsg = "Registration Succeed"
+	appResponse.RespMsg = "Get Users data Succeed"
 
 	tx.Commit()
 	s.Logger.Info(
 		logrus.Fields{}, nil, "END: GetUsers Service",
+	)
+	return
+}
+
+func (s *ServiceSetup)GetUsersRaw() (appResponse data.GetUserRes, err error) {
+	s.Logger.Info(
+		logrus.Fields{}, nil, "START: GetUsersRaw Service",
+	)
+	tx := s.Db.Begin()
+	if tx.Error != nil {
+		return appResponse, tx.Error
+	}
+	
+	datastoreResponse, err := s.Datastore.GetUsersRaw(tx)
+	if err != nil {
+		tx.Rollback()
+		s.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+		appResponse.RespMsg = err.Error()
+		return
+	}
+
+	appResponse.RespData = datastoreResponse
+
+	appResponse.RespMsg = "Get Users data Succeed"
+
+	tx.Commit()
+	s.Logger.Info(
+		logrus.Fields{}, nil, "END: GetUsersRaw Service",
+	)
+	return
+
+}
+func (s *ServiceSetup)GetUsersRawMap() (appResponse data.GetUserResRawMap, err error) {
+	s.Logger.Info(
+		logrus.Fields{}, nil, "START: GetUsersRawMap Service",
+	)
+	tx := s.Db.Begin()
+	if tx.Error != nil {
+		return appResponse, tx.Error
+	}
+	
+	datastoreResponse, err := s.Datastore.GetUsersRawMap(tx)
+	if err != nil {
+		tx.Rollback()
+		s.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+		appResponse.RespMsg = err.Error()
+		return
+	}
+
+	appResponse.RespData = datastoreResponse
+
+	appResponse.RespMsg = "Get Users data Succeed"
+
+	tx.Commit()
+	s.Logger.Info(
+		logrus.Fields{}, nil, "END: GetUsersRawMap Service",
 	)
 	return
 }

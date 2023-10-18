@@ -19,6 +19,11 @@ type GetUserRes struct {
 	RespData []GetUserQuerySelectItems `json:"resp_data"`
 }
 
+type GetUserResRawMap struct {
+	RespMsg  string     `json:"resp_msg"`
+	RespData []map[string]interface{} `json:"resp_data"`
+}
+
 type CreateUserReq struct {
 	Username string  `json:"username"`
 	Password string  `json:"password"`

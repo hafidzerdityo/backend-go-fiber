@@ -7,25 +7,67 @@ import (
 	"hafidzresttemplate.com/data"
 )
 
-// func(d *DatastoreSetup) GetUsers(tx *gorm.DB)(datastoreResponse []data.GetUserQuerySelectItems, err error){
+func(d *DatastoreSetup) GetUsersRaw(tx *gorm.DB)(datastoreResponse []data.GetUserQuerySelectItems, err error){
+	d.Logger.Info(
+		logrus.Fields{}, nil, "START: GetUsersRaw Datastore",
+	)
 
-// 	sqlQuery := `SELECT * FROM public."user"`
+	sqlQuery := `SELECT * FROM public."user"`
 
-//     // Execute the raw SQL query
-//     rawQuery := tx.Raw(sqlQuery)
+    rawQuery := tx.Raw(sqlQuery)
 
-//     // Handle any query execution error
-//     if rawQuery.Error != nil {
-//         return nil, rawQuery.Error
-//     }
+    if rawQuery.Error != nil {
+		d.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+        return nil, rawQuery.Error
+    }
 
-//     // Scan the result into the datastoreResponse slice
-//     if err := rawQuery.Scan(&datastoreResponse).Error; err != nil {
-//         return datastoreResponse, err
-//     }
+    // Scan the result into the datastoreResponse slice
+    if err := rawQuery.Scan(&datastoreResponse).Error; err != nil {
+		d.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+        return datastoreResponse, err
+    }
 
-// 	return
-// }
+	d.Logger.Info(
+		logrus.Fields{}, nil, "END: GetUsersRaw Datastore",
+	)
+
+	return
+}
+
+func(d *DatastoreSetup) GetUsersRawMap(tx *gorm.DB)(datastoreResponse []map[string]interface{}, err error){
+	d.Logger.Info(
+		logrus.Fields{}, nil, "START: GetUsersRawMap Datastore",
+	)
+
+	sqlQuery := `SELECT * FROM public."user"`
+    rawQuery := tx.Raw(sqlQuery)
+
+    if rawQuery.Error != nil {
+		d.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+        return nil, rawQuery.Error
+    }
+
+    // Find the result into the datastoreResponse slice
+    if err = rawQuery.Find(&datastoreResponse).Error; err != nil {
+        return
+    }
+	
+	for _, val := range(datastoreResponse){
+		delete(val, "hashed_password")
+	}
+
+	d.Logger.Info(
+		logrus.Fields{}, nil, "END: GetUsersRawMap Datastore",
+	)
+
+	return
+}
 
 func(d *DatastoreSetup) GetUsers(tx *gorm.DB)(datastoreResponse []dao.User, err error){
 	d.Logger.Info(
