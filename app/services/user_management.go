@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"hafidzresttemplate.com/dao"
 	"hafidzresttemplate.com/data"
+	"hafidzresttemplate.com/pkg"
 )
 
 func (s *ServiceSetup)GetUsers() (appResponse data.GetUserRes, err error) {
@@ -37,8 +38,8 @@ func (s *ServiceSetup)GetUsers() (appResponse data.GetUserRes, err error) {
 		appResponse.RespMsg = err.Error()
 		return
 	}
-	
-	appResponse.RespMsg = "Success"
+
+	appResponse.RespMsg = "Registration Succeed"
 
 	tx.Commit()
 	s.Logger.Info(
@@ -59,7 +60,18 @@ func (s *ServiceSetup)CreateUser(reqPayload data.CreateUserReq) (appResponse dat
 	var reqPayloadToInsert dao.User
 
 	reqPayloadToInsert.Username = reqPayload.Username
-	reqPayloadToInsert.HashedPassword = reqPayload.Password
+
+	getHashedPass, err := pkg.HashPassword(reqPayload.Password)
+	if err != nil {
+		tx.Rollback()
+		s.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+		appResponse.RespMsg = err.Error()
+		return
+	}
+
+	reqPayloadToInsert.HashedPassword = getHashedPass
 	reqPayloadToInsert.Nama = reqPayload.Nama
 	reqPayloadToInsert.Role = reqPayload.Role
 	reqPayloadToInsert.Divisi = reqPayload.Divisi

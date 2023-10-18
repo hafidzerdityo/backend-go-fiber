@@ -41,6 +41,7 @@ func (a *ApiSetup) CreateUser(c *gin.Context) {
 		a.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -49,10 +50,10 @@ func (a *ApiSetup) CreateUser(c *gin.Context) {
 		a.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		c.IndentedJSON(http.StatusNotFound, data)
+		c.IndentedJSON(http.StatusInternalServerError, data)
 		return
 	}
-	c.IndentedJSON(http.StatusOK, data)
+	c.IndentedJSON(http.StatusCreated, data)
 
 	
 	a.Logger.Info(
