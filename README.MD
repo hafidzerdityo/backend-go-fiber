@@ -43,15 +43,15 @@ A straightforward backend template built with Go Gin-Gonic, designed to kickstar
    - Create `config.env` (For Database config):
      ```plaintext
      POSTGRES_USER=postgres
-     POSTGRES_PASSWORD=default15p
-     POSTGRES_HOST=postgres_rest_template
-     POSTGRES_PORT=8003
      POSTGRES_DB=rest_template
+     POSTGRES_PASSWORD=default15p
+     POSTGRES_HOST=postgres_rest_template_go
+     POSTGRES_PORT=8103
      ```
 
    Feel free to change the values in the `.env` files based on your needs.
 
-3. On the root directory, run the following command to start the development server along with the database:
+3. On the root directory, run the following command to start the development server along with the database. Make sure you have docker installed:
    ```bash
    docker-compose up
    ```
