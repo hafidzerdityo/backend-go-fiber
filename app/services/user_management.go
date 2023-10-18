@@ -1,27 +1,92 @@
 package services
 
-import "hafidzresttemplate.com/data"
+import (
+	"time"
 
-func (s *ServiceSetup)GetUsers() (appResult []data.User, err error) {
-	s.Logger.Info("Users Service exected")
+	"github.com/jinzhu/copier"
+	"github.com/sirupsen/logrus"
+	"hafidzresttemplate.com/dao"
+	"hafidzresttemplate.com/data"
+)
+
+func (s *ServiceSetup)GetUsers() (appResponse data.GetUserRes, err error) {
+	s.Logger.Info(
+		logrus.Fields{}, nil, "START: GetUsers Service",
+	)
 	tx := s.Db.Begin()
 	if tx.Error != nil {
-		return appResult, tx.Error
+		return appResponse, tx.Error
 	}
 	
-	appResult, err = s.Datastore.CheckUser(tx)
+	datastoreResponse, err := s.Datastore.GetUsers(tx)
 	if err != nil {
 		tx.Rollback()
-		s.Logger.Error("Check User Failed, Rollback.")
+		s.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+		appResponse.RespMsg = err.Error()
+		return
 	}
 
+	err = copier.Copy(&appResponse.RespData, datastoreResponse)
+	if err != nil {
+		tx.Rollback()
+		s.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+		appResponse.RespMsg = err.Error()
+		return
+	}
+	
+	appResponse.RespMsg = "Success"
+
 	tx.Commit()
+	s.Logger.Info(
+		logrus.Fields{}, nil, "END: GetUsers Service",
+	)
 	return
 }
 
-func (s *ServiceSetup)GetMap()(appResult []map[string]interface{}, err error){
+func (s *ServiceSetup)CreateUser(reqPayload data.CreateUserReq) (appResponse data.CreateUserRes, err error) {
+	s.Logger.Info(
+		logrus.Fields{}, nil, "START: CreateUser Service",
+	)
+	tx := s.Db.Begin()
+	if tx.Error != nil {
+		return appResponse, tx.Error
+	}
 
-	s.Logger.Info("GetMap Service exected")
-	appResult, err = s.Datastore.CreateUser()
+	var reqPayloadToInsert dao.User
+
+	reqPayloadToInsert.Username = reqPayload.Username
+	reqPayloadToInsert.HashedPassword = reqPayload.Password
+	reqPayloadToInsert.Nama = reqPayload.Nama
+	reqPayloadToInsert.Role = reqPayload.Role
+	reqPayloadToInsert.Divisi = reqPayload.Divisi
+	reqPayloadToInsert.Jabatan = reqPayload.Jabatan
+	reqPayloadToInsert.CreatedAt = time.Now()
+	reqPayloadToInsert.UpdatedAt = nil
+	reqPayloadToInsert.IsDeleted = false
+
+	
+	datastoreResponse, err := s.Datastore.InsertUser(tx, reqPayloadToInsert)
+	if err != nil {
+		tx.Rollback()
+		s.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+		appResponse.RespMsg = err.Error()
+		return
+	}
+
+	appResponse.RespData = datastoreResponse
+	appResponse.RespMsg = "Success"
+
+	tx.Commit()
+
+	s.Logger.Info(
+		logrus.Fields{}, nil, "END: CreateUser Service",
+	)
 	return
 }
+

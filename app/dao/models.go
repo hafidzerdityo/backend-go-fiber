@@ -4,33 +4,34 @@ import (
 	"time"
 )
 
-// User represents the user table in the database.
+type Transaksi struct {
+    ID          int       `gorm:"primaryKey"`
+    Kategori    string    `gorm:"size:255"`
+    MlModel     string    `gorm:"size:255"`
+    CreatedAt   time.Time
+    UpdatedAt   *time.Time `gorm:"autoUpdateTime:false"`
+    Credit      int64     `gorm:"type:numeric(10,2)"`
+    Username    string    `gorm:"size:20;unique"`
+    User        *User     `gorm:"foreignKey:Username;references:Username"`
+}
+
 type User struct {
     Username      string `gorm:"primaryKey;size:20"`
     HashedPassword string `gorm:"size:255"`
     Nama          string `gorm:"size:255"`
     Role          string `gorm:"size:30"`
-    Divisi        string `gorm:"size:255"`
-    Jabatan       string `gorm:"size:255"`
-    CreatedAt     time.Time
-    UpdatedAt     *time.Time
-    IsDeleted     bool
+    Divisi        *string `gorm:"size:255"`
+    Jabatan       *string `gorm:"size:255"`
+    CreatedAt     time.Time 
+    UpdatedAt     *time.Time `gorm:"autoUpdateTime:false"`
+    IsDeleted     bool 
 }
 
-type Transaksi struct {
-    ID               int `gorm:"primaryKey"`
-    Kategori         string `gorm:"size:255"`
-    MetodePengadaan  string `gorm:"size:255"`
-    CreatedAt        time.Time
-    UpdatedAt        *time.Time
-    Bsu              float64 `gorm:"type:numeric(10,2)"`
-    Username         string `gorm:"foreignKey:Username;size:20"`
+
+func (Transaksi) TableName() string {
+    return "transaksi"
 }
 
 func (User) TableName() string {
     return "user"
-}
-
-func (Transaksi) TableName() string {
-    return "transaksi"
 }

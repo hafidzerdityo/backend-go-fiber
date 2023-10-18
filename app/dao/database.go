@@ -19,7 +19,7 @@ func InitializeDB(user string,
     }
 
 	// AutoMigrate your models here
-	err = db.AutoMigrate(&User{}, &Transaksi{})
+	err = db.AutoMigrate(&Transaksi{}, &User{})
 	if err != nil {
 		return nil, err
 	}

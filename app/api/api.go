@@ -39,8 +39,7 @@ func InitApi(db *gorm.DB)(router *gin.Engine) {
 	{
 		user := api.Group("/user_management")
 		user.GET("/users", apiSetup.GetUsers)
-		user2 := api.Group("/user_management2")
-		user2.GET("/random_map", apiSetup.GetTestMap)
+		user.POST("/user", apiSetup.CreateUser)
 	}
 
 	return 

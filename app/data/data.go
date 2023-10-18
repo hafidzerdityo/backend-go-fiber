@@ -1,20 +1,38 @@
 package data
 
-type Book struct {
-	ID     string `json:"id"`
-	Title  string `json:"title"`
-	Author string `json:"author,omitempty"`
+import "time"
+
+// this is for raw query select
+type GetUserQuerySelectItems struct {
+	Username  string  `gorm:"column:username" json:"username"`
+	Nama      string  `gorm:"column:nama" json:"nama"`
+	Role      string  `gorm:"column:role" json:"role"`
+	Divisi    *string `gorm:"column:divisi" json:"divisi"`
+	Jabatan   *string `gorm:"column:jabatan" json:"jabatan"`
+	CreatedAt   time.Time `gorm:"column:created_at" json:"created_at"`
+	UpdatedAt   *time.Time `gorm:"column:updated_at" json:"updated_at"`
+	IsDeleted bool    `gorm:"column:is_deleted" json:"is_deleted"`
 }
 
-type User struct {
-	Id             int64   `gorm:"column:id" json:"id"`
-	Username       string  `gorm:"column:username" json:"username"`
-	Name           string  `gorm:"column:name" json:"name"`
-	Email          string  `gorm:"column:email" json:"email"`
-	HashedPassword string  `gorm:"column:hashed_password" json:"hashed_password"`
-	Gender         *string `gorm:"column:gender" json:"gender"`
-	Birthdate      string  `gorm:"column:birthdate" json:"birthdate"`
-	Age            int32   `gorm:"column:age" json:"age"`
-	CreatedAt      string  `gorm:"column:created_at" json:"created_at"`
-	Country        string  `gorm:"column:country" json:"country"`
+type GetUserRes struct {
+	RespMsg  string     `json:"resp_msg"`
+	RespData []GetUserQuerySelectItems `json:"resp_data"`
+}
+
+type CreateUserReq struct {
+	Username string  `json:"username"`
+	Password string  `json:"password"`
+	Nama     string  `json:"nama"`
+	Role     string  `json:"role"`
+	Divisi   *string `json:"divisi"`
+	Jabatan  *string `json:"jabatan"`
+}
+
+type CreateUserResItems struct {
+	Success bool `json:"success"`
+}
+
+type CreateUserRes struct {
+	RespMsg  string             `json:"resp_msg"`
+	RespData CreateUserResItems `json:"resp_data"`
 }

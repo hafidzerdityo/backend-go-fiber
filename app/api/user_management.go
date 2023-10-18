@@ -1,36 +1,62 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"hafidzresttemplate.com/data"
 )
 
 func (a *ApiSetup) GetUsers(c *gin.Context) {
-	a.Logger.Info("Getting userss...")
+	a.Logger.Info(
+		logrus.Fields{}, nil, "START: GetUsers API",
+	)
 
 	data, err := a.Services.GetUsers()
 	if err != nil{
-		a.Logger.Error("Error when a.Services.GetUsers()")
-		c.IndentedJSON(http.StatusNotFound, "")
+		a.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+		c.IndentedJSON(http.StatusNotFound, data)
 		return
 	}
 	c.IndentedJSON(http.StatusOK, data)
+
+	a.Logger.Info(
+		logrus.Fields{}, nil, "END: GetUsers API",
+	)
+
 	return
 }
 
-func (a *ApiSetup) GetTestMap(c *gin.Context) {
-	a.Logger.Info("Getting test map...")
+func (a *ApiSetup) CreateUser(c *gin.Context) {
+	a.Logger.Info(
+		logrus.Fields{}, nil, "START: CreateUser API",
+	)
 
-	data, err := a.Services.GetMap()
+	var reqPayload data.CreateUserReq
 
-	jsonData, err := json.Marshal(data)
-	if err != nil {
-		a.Logger.Error(err)
-		c.Error(err)
+	if err := c.BindJSON(&reqPayload); err != nil {
+		a.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
 		return
 	}
 
-	c.Data(http.StatusOK, "application/json", jsonData)
+	data, err := a.Services.CreateUser(reqPayload)
+	if err != nil{
+		a.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+		c.IndentedJSON(http.StatusNotFound, data)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, data)
+
+	
+	a.Logger.Info(
+		logrus.Fields{}, nil, "END: CreateUser API",
+	)
+	return
 }
