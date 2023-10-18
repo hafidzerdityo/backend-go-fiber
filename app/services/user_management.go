@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"hafidzresttemplate.com/dao"
 	"hafidzresttemplate.com/data"
-	"hafidzresttemplate.com/pkg"
+	"hafidzresttemplate.com/pkg/utils"
 )
 
 func (s *ServiceSetup)GetUsers() (appResponse data.GetUserRes, err error) {
@@ -61,7 +61,7 @@ func (s *ServiceSetup)CreateUser(reqPayload data.CreateUserReq) (appResponse dat
 
 	reqPayloadToInsert.Username = reqPayload.Username
 
-	getHashedPass, err := pkg.HashPassword(reqPayload.Password)
+	getHashedPass, err := utils.HashPassword(reqPayload.Password)
 	if err != nil {
 		tx.Rollback()
 		s.Logger.Error(
