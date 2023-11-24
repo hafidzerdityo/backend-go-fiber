@@ -8,8 +8,6 @@ type GetUserQuerySelectItems struct {
 	Nama      string  `gorm:"column:nama" json:"nama"`
 	Email      string  `gorm:"column:email" json:"email"`
 	Role      string  `gorm:"column:role" json:"role"`
-	Divisi    *string `gorm:"column:divisi" json:"divisi"`
-	Jabatan   *string `gorm:"column:jabatan" json:"jabatan"`
 	CreatedAt   time.Time `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt   *time.Time `gorm:"column:updated_at" json:"updated_at"`
 	IsDeleted bool    `gorm:"column:is_deleted" json:"is_deleted"`
