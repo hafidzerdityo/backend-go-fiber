@@ -132,10 +132,9 @@ func (s *ServiceSetup)CreateUser(reqPayload data.CreateUserReq) (appResponse dat
 	}
 
 	reqPayloadToInsert.HashedPassword = getHashedPass
+	reqPayloadToInsert.Email = reqPayload.Email
 	reqPayloadToInsert.Nama = reqPayload.Nama
 	reqPayloadToInsert.Role = reqPayload.Role
-	reqPayloadToInsert.Divisi = reqPayload.Divisi
-	reqPayloadToInsert.Jabatan = reqPayload.Jabatan
 	reqPayloadToInsert.CreatedAt = time.Now()
 	reqPayloadToInsert.UpdatedAt = nil
 	reqPayloadToInsert.IsDeleted = false

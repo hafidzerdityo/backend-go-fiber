@@ -6,6 +6,7 @@ import "time"
 type GetUserQuerySelectItems struct {
 	Username  string  `gorm:"column:username" json:"username"`
 	Nama      string  `gorm:"column:nama" json:"nama"`
+	Email      string  `gorm:"column:email" json:"email"`
 	Role      string  `gorm:"column:role" json:"role"`
 	Divisi    *string `gorm:"column:divisi" json:"divisi"`
 	Jabatan   *string `gorm:"column:jabatan" json:"jabatan"`
@@ -28,9 +29,8 @@ type CreateUserReq struct {
 	Username string  `json:"username"`
 	Password string  `json:"password"`
 	Nama     string  `json:"nama"`
+	Email     string  `json:"email"`
 	Role     string  `json:"role"`
-	Divisi   *string `json:"divisi"`
-	Jabatan  *string `json:"jabatan"`
 }
 
 type CreateUserResItems struct {

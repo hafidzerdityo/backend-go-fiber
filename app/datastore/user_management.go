@@ -75,7 +75,7 @@ func(d *DatastoreSetup) GetUsers(tx *gorm.DB)(datastoreResponse []dao.User, err 
 	)
 
 	selectedColumns := []string{
-		"Username", "Nama", "Role", "Divisi", "Jabatan", "CreatedAt", "UpdatedAt", "IsDeleted",
+		"Username", "Nama", "Email" ,"Role", "Divisi", "Jabatan", "CreatedAt", "UpdatedAt", "IsDeleted",
 	}
     if err := tx.Select(selectedColumns).Find(&datastoreResponse).Error; err != nil {
 		d.Logger.Error(
@@ -95,16 +95,6 @@ func(d *DatastoreSetup) InsertUser(tx *gorm.DB, reqPayload dao.User)(datastoreRe
 	d.Logger.Info(
 		logrus.Fields{}, nil, "START: InsertUser Datastore",
 	)
-	var sampleTrans dao.Transaksi
-
-	sampleTrans.Username = reqPayload.Username
-
-	if err := tx.Create(&sampleTrans).Error; err != nil {
-		d.Logger.Error(
-			logrus.Fields{"error": err.Error()}, nil, err.Error(),
-		)
-		return datastoreResponse, err
-	}
 
 	if err := tx.Create(&reqPayload).Error; err != nil {
 		d.Logger.Error(
