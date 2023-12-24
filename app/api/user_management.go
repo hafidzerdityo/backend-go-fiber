@@ -1,14 +1,12 @@
 package api
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 	"hafidzresttemplate.com/data"
 )
 
-func (a *ApiSetup) GetUsers(c *gin.Context) {
+func (a *ApiSetup) GetUsers(c *fiber.Ctx) error  {
 	a.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsers API",
 	)
@@ -18,19 +16,23 @@ func (a *ApiSetup) GetUsers(c *gin.Context) {
 		a.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		c.IndentedJSON(http.StatusNotFound, data)
-		return
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"resp_msg" : err.Error(),
+			"resp_data" : data,
+		})
 	}
-	c.IndentedJSON(http.StatusOK, data)
 
 	a.Logger.Info(
 		logrus.Fields{}, nil, "END: GetUsers API",
 	)
 
-	return
+	return c.JSON(fiber.Map{
+		"resp_msg" : "Get Users data Succeed",
+		"resp_data" : data,
+	})
 }
 
-func (a *ApiSetup) GetUsersRaw(c *gin.Context) {
+func (a *ApiSetup) GetUsersRaw(c *fiber.Ctx) error {
 	a.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsersRaw API",
 	)
@@ -40,19 +42,23 @@ func (a *ApiSetup) GetUsersRaw(c *gin.Context) {
 		a.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		c.IndentedJSON(http.StatusNotFound, data)
-		return
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"resp_msg" : err.Error(),
+			"resp_data" : data,
+		})
 	}
-	c.IndentedJSON(http.StatusOK, data)
 
 	a.Logger.Info(
 		logrus.Fields{}, nil, "END: GetUsersRaw API",
 	)
 
-	return
+	return c.JSON(fiber.Map{
+		"resp_msg" : "Get Users data RAW Succeed",
+		"resp_data" : data,
+	})
 }
 
-func (a *ApiSetup) GetUsersRawMap(c *gin.Context) {
+func (a *ApiSetup) GetUsersRawMap(c *fiber.Ctx) error {
 	a.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsersRawMap API",
 	)
@@ -62,43 +68,39 @@ func (a *ApiSetup) GetUsersRawMap(c *gin.Context) {
 		a.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		c.IndentedJSON(http.StatusNotFound, data)
-		return
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"resp_msg" : err.Error(),
+			"resp_data" : data,
+		})
 	}
-
-    c.Header("Content-Type", "application/json")
-    c.JSON(http.StatusOK, data)
-
-
-	// jsonData, err := json.Marshal(data)
-	// if err != nil {
-	// 	a.Logger.Error(err)
-	// 	c.Error(err)
-	// 	return
-	// }
-
-	// c.Data(http.StatusOK, "application/json", jsonData)
 
 	a.Logger.Info(
 		logrus.Fields{}, nil, "END: GetUsersRawMap API",
 	)
 
-	return
+	return c.JSON(fiber.Map{
+		"resp_msg" : "Get Users data RAW MAP Succeed",
+		"resp_data" : data,
+	})
 }
 
-func (a *ApiSetup) CreateUser(c *gin.Context) {
+func (a *ApiSetup) CreateUser(c *fiber.Ctx) error {
 	a.Logger.Info(
 		logrus.Fields{}, nil, "START: CreateUser API",
 	)
 
 	var reqPayload data.CreateUserReq
 
-	if err := c.BindJSON(&reqPayload); err != nil {
+	if err := c.BodyParser(&reqPayload); err != nil {
 		a.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"resp_msg" : err.Error(),
+			"resp_data" : data.CreateUserQuery{
+				Success: false,
+			},
+		})
 	}
 
 	data, err := a.Services.CreateUser(reqPayload)
@@ -106,14 +108,18 @@ func (a *ApiSetup) CreateUser(c *gin.Context) {
 		a.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		c.IndentedJSON(http.StatusInternalServerError, data)
-		return
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"resp_msg" : err.Error(),
+			"resp_data" : data,
+		})
 	}
-	c.IndentedJSON(http.StatusCreated, data)
 
 	
 	a.Logger.Info(
 		logrus.Fields{}, nil, "END: CreateUser API",
 	)
-	return
+	return c.JSON(fiber.Map{
+		"resp_msg" : "Create User Data Succeed",
+		"resp_data" : data,
+	})
 }

@@ -7,7 +7,7 @@ import (
 	"hafidzresttemplate.com/data"
 )
 
-func(d *DatastoreSetup) GetUsersRaw(tx *gorm.DB)(datastoreResponse []data.GetUserQuerySelectItems, err error){
+func(d *DatastoreSetup) GetUsersRaw(tx *gorm.DB)(datastoreResponse []data.GetUserQuery, err error){
 	d.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsersRaw Datastore",
 	)
@@ -75,7 +75,7 @@ func(d *DatastoreSetup) GetUsers(tx *gorm.DB)(datastoreResponse []dao.User, err 
 	)
 
 	selectedColumns := []string{
-		"Username", "Nama", "Email" ,"Role", "Divisi", "Jabatan", "CreatedAt", "UpdatedAt", "IsDeleted",
+		"Username", "Nama", "Email" ,"Role", "CreatedAt", "UpdatedAt", "IsDeleted",
 	}
     if err := tx.Select(selectedColumns).Find(&datastoreResponse).Error; err != nil {
 		d.Logger.Error(
@@ -91,7 +91,7 @@ func(d *DatastoreSetup) GetUsers(tx *gorm.DB)(datastoreResponse []dao.User, err 
     return
 }
 
-func(d *DatastoreSetup) InsertUser(tx *gorm.DB, reqPayload dao.User)(datastoreResponse data.CreateUserResItems, err error){
+func(d *DatastoreSetup) InsertUser(tx *gorm.DB, reqPayload dao.User)(datastoreResponse data.CreateUserQuery, err error){
 	d.Logger.Info(
 		logrus.Fields{}, nil, "START: InsertUser Datastore",
 	)

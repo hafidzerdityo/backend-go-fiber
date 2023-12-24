@@ -36,5 +36,9 @@ func main() {
 
 	
 	app := api.InitApi(dbInit)
-	app.Run(fmt.Sprintf("%v:%v",host, port))
+	app.Listen(fmt.Sprintf("%v:%v",host, port))
+	if err != nil {
+		fmt.Println("Error When Initializing Server")
+		panic(err)
+	}
 }

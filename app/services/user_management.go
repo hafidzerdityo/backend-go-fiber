@@ -10,7 +10,7 @@ import (
 	"hafidzresttemplate.com/pkg/utils"
 )
 
-func (s *ServiceSetup)GetUsers() (appResponse data.GetUserRes, err error) {
+func (s *ServiceSetup)GetUsers() (appResponse []data.GetUserQuery, err error) {
 	s.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsers Service",
 	)
@@ -25,21 +25,17 @@ func (s *ServiceSetup)GetUsers() (appResponse data.GetUserRes, err error) {
 		s.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		appResponse.RespMsg = err.Error()
 		return
 	}
 
-	err = copier.Copy(&appResponse.RespData, datastoreResponse)
+	err = copier.Copy(&appResponse, datastoreResponse)
 	if err != nil {
 		tx.Rollback()
 		s.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		appResponse.RespMsg = err.Error()
 		return
 	}
-
-	appResponse.RespMsg = "Get Users data Succeed"
 
 	tx.Commit()
 	s.Logger.Info(
@@ -48,7 +44,7 @@ func (s *ServiceSetup)GetUsers() (appResponse data.GetUserRes, err error) {
 	return
 }
 
-func (s *ServiceSetup)GetUsersRaw() (appResponse data.GetUserRes, err error) {
+func (s *ServiceSetup)GetUsersRaw() (appResponse []data.GetUserQuery, err error) {
 	s.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsersRaw Service",
 	)
@@ -63,13 +59,11 @@ func (s *ServiceSetup)GetUsersRaw() (appResponse data.GetUserRes, err error) {
 		s.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		appResponse.RespMsg = err.Error()
+
 		return
 	}
 
-	appResponse.RespData = datastoreResponse
-
-	appResponse.RespMsg = "Get Users data Succeed"
+	appResponse = datastoreResponse
 
 	tx.Commit()
 	s.Logger.Info(
@@ -78,7 +72,7 @@ func (s *ServiceSetup)GetUsersRaw() (appResponse data.GetUserRes, err error) {
 	return
 
 }
-func (s *ServiceSetup)GetUsersRawMap() (appResponse data.GetUserResRawMap, err error) {
+func (s *ServiceSetup)GetUsersRawMap() (appResponse []map[string]interface{}, err error) {
 	s.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsersRawMap Service",
 	)
@@ -93,13 +87,10 @@ func (s *ServiceSetup)GetUsersRawMap() (appResponse data.GetUserResRawMap, err e
 		s.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		appResponse.RespMsg = err.Error()
 		return
 	}
 
-	appResponse.RespData = datastoreResponse
-
-	appResponse.RespMsg = "Get Users data Succeed"
+	appResponse = datastoreResponse
 
 	tx.Commit()
 	s.Logger.Info(
@@ -108,7 +99,7 @@ func (s *ServiceSetup)GetUsersRawMap() (appResponse data.GetUserResRawMap, err e
 	return
 }
 
-func (s *ServiceSetup)CreateUser(reqPayload data.CreateUserReq) (appResponse data.CreateUserRes, err error) {
+func (s *ServiceSetup)CreateUser(reqPayload data.CreateUserReq) (appResponse data.CreateUserQuery, err error) {
 	s.Logger.Info(
 		logrus.Fields{}, nil, "START: CreateUser Service",
 	)
@@ -127,7 +118,6 @@ func (s *ServiceSetup)CreateUser(reqPayload data.CreateUserReq) (appResponse dat
 		s.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		appResponse.RespMsg = err.Error()
 		return
 	}
 
@@ -146,12 +136,10 @@ func (s *ServiceSetup)CreateUser(reqPayload data.CreateUserReq) (appResponse dat
 		s.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
-		appResponse.RespMsg = err.Error()
 		return
 	}
 
-	appResponse.RespData = datastoreResponse
-	appResponse.RespMsg = "Success"
+	appResponse = datastoreResponse
 
 	tx.Commit()
 

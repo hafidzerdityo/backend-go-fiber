@@ -1,7 +1,8 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"hafidzresttemplate.com/datastore"
@@ -28,21 +29,21 @@ func NewApiSetup(db *gorm.DB)(apiSet ApiSetup) {
     return 
 }
 
-func InitApi(db *gorm.DB)(router *gin.Engine) {
-	router = gin.New()
- 	router.Use(gin.Logger())
- 	router.Use(gin.Recovery())
-	apiSetup := NewApiSetup(db)
+func InitApi(db *gorm.DB)(app *fiber.App) {
+	app = fiber.New()
+	app.Use(logger.New())
 
+	apiSetup := NewApiSetup(db)
 	apiSetup.Logger.Info("Setting up routes...")
-	api := router.Group("/api/v1")
-	{
-		user := api.Group("/user_management")
-		user.GET("/users", apiSetup.GetUsers)
-		user.GET("/usersraw", apiSetup.GetUsersRaw)
-		user.GET("/usersrawmap", apiSetup.GetUsersRawMap)
-		user.POST("/user", apiSetup.CreateUser)
-	}
+
+	api := app.Group("/api")
+	v1 := api.Group("/v1")
+	user := v1.Group("/user_management")
+	user.Get("/users", apiSetup.GetUsers)
+	user.Get("/usersraw", apiSetup.GetUsersRaw)
+	user.Get("/usersrawmap", apiSetup.GetUsersRawMap)
+	user.Post("/user", apiSetup.CreateUser)
+	
 
 	return 
 }
