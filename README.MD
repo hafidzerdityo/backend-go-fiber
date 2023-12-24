@@ -1,12 +1,12 @@
-# Work in Progress Backend Template Go Gin-Gonic
+# Work in Progress Backend Template Go Fiber
 
 Please note that this backend template is currently under development, and I actively working on adding more features and improvements to it. Stay tuned for future updates and enhancements that will further enhance its functionality and usability.
 
-A straightforward backend template built with Go Gin-Gonic, designed to kickstart your backend development with ease. It comes packed with essential features, including JSON Web Token (JWT) authentication, user management, and a containerized PostgreSQL database. The entire stack is containerized with Docker, simplifying deployment.
+A straightforward backend template built with Go Fiber, designed to kickstart your backend development with ease. It comes packed with essential features, including JSON Web Token (JWT) authentication, user management, and a containerized PostgreSQL database. The entire stack is containerized with Docker, simplifying deployment.
 
 ## Key Features
 
-- **Gin-Gonic**: Harness the power of Gin-Gonic, a high-performance web framework for building APIs with Go.
+- **Fiber**: Harness the power of Fiber, a high-performance web framework for building APIs with Go.
 
 - **GORM ORM**: Utilize GORM as the ORM to interact with the PostgreSQL database, enabling efficient database operations and data modeling. (Next Update)
 
