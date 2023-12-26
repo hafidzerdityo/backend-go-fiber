@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
-	"hafidzresttemplate.com/data"
+	"hafidzresttemplate.com/dao"
 )
 
 func (a *ApiSetup) GetUsers(c *fiber.Ctx) error  {
@@ -89,7 +89,7 @@ func (a *ApiSetup) CreateUser(c *fiber.Ctx) error {
 		logrus.Fields{}, nil, "START: CreateUser API",
 	)
 
-	var reqPayload data.CreateUserReq
+	var reqPayload dao.CreateUserReq
 
 	if err := c.BodyParser(&reqPayload); err != nil {
 		a.Logger.Error(
@@ -97,7 +97,7 @@ func (a *ApiSetup) CreateUser(c *fiber.Ctx) error {
 		)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"resp_msg" : err.Error(),
-			"resp_data" : data.CreateUserQuery{
+			"resp_data" : dao.CreateUserQuery{
 				Success: false,
 			},
 		})

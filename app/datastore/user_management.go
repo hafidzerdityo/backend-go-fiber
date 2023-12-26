@@ -4,10 +4,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"hafidzresttemplate.com/dao"
-	"hafidzresttemplate.com/data"
 )
 
-func(d *DatastoreSetup) GetUsersRaw(tx *gorm.DB)(datastoreResponse []data.GetUserQuery, err error){
+func(d *DatastoreSetup) GetUsersRaw(tx *gorm.DB)(datastoreResponse []dao.GetUserQuery, err error){
 	d.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsersRaw Datastore",
 	)
@@ -91,7 +90,7 @@ func(d *DatastoreSetup) GetUsers(tx *gorm.DB)(datastoreResponse []dao.User, err 
     return
 }
 
-func(d *DatastoreSetup) InsertUser(tx *gorm.DB, reqPayload dao.User)(datastoreResponse data.CreateUserQuery, err error){
+func(d *DatastoreSetup) InsertUser(tx *gorm.DB, reqPayload dao.User)(datastoreResponse dao.CreateUserQuery, err error){
 	d.Logger.Info(
 		logrus.Fields{}, nil, "START: InsertUser Datastore",
 	)

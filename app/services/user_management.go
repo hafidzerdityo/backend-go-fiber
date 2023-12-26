@@ -6,11 +6,10 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/sirupsen/logrus"
 	"hafidzresttemplate.com/dao"
-	"hafidzresttemplate.com/data"
 	"hafidzresttemplate.com/pkg/utils"
 )
 
-func (s *ServiceSetup)GetUsers() (appResponse []data.GetUserQuery, err error) {
+func (s *ServiceSetup)GetUsers() (appResponse []dao.GetUserQuery, err error) {
 	s.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsers Service",
 	)
@@ -44,7 +43,7 @@ func (s *ServiceSetup)GetUsers() (appResponse []data.GetUserQuery, err error) {
 	return
 }
 
-func (s *ServiceSetup)GetUsersRaw() (appResponse []data.GetUserQuery, err error) {
+func (s *ServiceSetup)GetUsersRaw() (appResponse []dao.GetUserQuery, err error) {
 	s.Logger.Info(
 		logrus.Fields{}, nil, "START: GetUsersRaw Service",
 	)
@@ -99,7 +98,7 @@ func (s *ServiceSetup)GetUsersRawMap() (appResponse []map[string]interface{}, er
 	return
 }
 
-func (s *ServiceSetup)CreateUser(reqPayload data.CreateUserReq) (appResponse data.CreateUserQuery, err error) {
+func (s *ServiceSetup)CreateUser(reqPayload dao.CreateUserReq) (appResponse dao.CreateUserQuery, err error) {
 	s.Logger.Info(
 		logrus.Fields{}, nil, "START: CreateUser Service",
 	)
