@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/jinzhu/copier"
@@ -21,6 +22,15 @@ func (s *ServiceSetup)GetUsers() (appResponse []dao.GetUserQuery, err error) {
 	datastoreResponse, err := s.Datastore.GetUsers(tx)
 	if err != nil {
 		tx.Rollback()
+		s.Logger.Error(
+			logrus.Fields{"error": err.Error()}, nil, err.Error(),
+		)
+		return
+	}
+
+	if len(datastoreResponse) == 0{
+		tx.Rollback()
+		err = fmt.Errorf("No Data Found")
 		s.Logger.Error(
 			logrus.Fields{"error": err.Error()}, nil, err.Error(),
 		)
